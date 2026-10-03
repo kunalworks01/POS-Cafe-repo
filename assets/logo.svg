@@ -1,0 +1,18 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Offset outer frame in signature warm bronze -->
+  <rect x="24" y="22" width="144" height="144" stroke="#9A6943" stroke-width="3.5" fill="none"/>
+  <!-- Foreground frame in bold black/foreground -->
+  <rect x="33" y="32" width="144" height="144" stroke="#1A1A1A" stroke-width="5" fill="none"/>
+  <!-- THE -->
+  <text x="47" y="74" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="31" letter-spacing="4" fill="#1A1A1A">THE</text>
+  <!-- Accent golden bar -->
+  <line x1="102" y1="82" x2="164" y2="82" stroke="#E5A823" stroke-width="2.5"/>
+  <!-- HOURGLASS -->
+  <text x="45" y="118" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="23" letter-spacing="2" fill="#1A1A1A">HOURGLASS</text>
+  <!-- Accent golden bar -->
+  <line x1="88" y1="126" x2="164" y2="126" stroke="#E5A823" stroke-width="2.5"/>
+  <!-- CAFE -->
+  <text x="47" y="162" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="31" letter-spacing="4" fill="#1A1A1A">CAFE</text>
+  <!-- Tagline -->
+  <text x="105" y="190" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="7.5" letter-spacing="2.5" fill="#1A1A1A">TASTE THE RHYTHM OF TIME</text>
+</svg>
