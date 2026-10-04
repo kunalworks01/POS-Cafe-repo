@@ -122,6 +122,7 @@ interface OrderCardProps {
   onDeleteItem?: (orderId: number, itemId: number) => void;
   onVoidItem?: (orderId: number, itemId: number, productName: string) => void;
   onRestoreItem?: (orderId: number, itemId: number) => void;
+  onMarkServed?: (orderId: number) => void;
 }
 
 export function OrderCard({
@@ -160,6 +161,7 @@ export function OrderCard({
   onDeleteItem,
   onVoidItem,
   onRestoreItem,
+  onMarkServed,
 }: OrderCardProps) {
   const tOrders = useTranslations('orders');
   const tCommon = useTranslations('common');
@@ -364,6 +366,20 @@ export function OrderCard({
               {orderTypeIcon}
               {tOrders(ORDER_TYPE_KEYS[order.type])}
             </span>
+
+            {(order.type === 'online' || Boolean(order.online_platform)) && (
+              <span className="inline-flex items-center gap-1 font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded-md border border-amber-300 dark:border-amber-800">
+                <Globe size={11} />
+                {order.online_platform || 'Online Order'}
+                {order.external_order_id && ` #${order.external_order_id}`}
+              </span>
+            )}
+
+            {order.status === 'served' && payStatus !== 'paid' && (
+              <span className="inline-flex items-center gap-1 font-semibold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-md border border-purple-300 dark:border-purple-800">
+                🍽️ {tOrders('unsettled')}
+              </span>
+            )}
 
             {order.table && (
               <span className="font-medium text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40 px-2 py-0.5 rounded-md">
@@ -828,17 +844,31 @@ export function OrderCard({
           </div>
         ) : (
           <div className="flex items-center gap-2">
+            {onMarkServed && ['pending', 'preparing', 'ready'].includes(order.status) && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onMarkServed(order.id)}
+                className="h-10 px-3 justify-center border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-800 dark:text-purple-300 font-semibold text-xs active:scale-95 touch-manipulation whitespace-nowrap"
+                title="Mark this order as served to customer"
+              >
+                🍽️ {tOrders('served')}
+              </Button>
+            )}
+
             <Button
               onClick={() => onCheckout(order.id)}
               disabled={generatingBillId === order.id}
               className={`flex-1 h-10 justify-center active:scale-95 touch-manipulation font-semibold text-xs ${
-                payStatus === 'partial'
+                order.status === 'served'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm'
+                  : payStatus === 'partial'
                   ? 'bg-blue-600 hover:bg-blue-700 text-white'
                   : 'bg-foreground text-background hover:bg-foreground/90'
               }`}
             >
               <CreditCard size={15} className="me-1.5" />
-              {checkoutButtonLabel}
+              {order.status === 'served' ? `${tOrders('takePayment')} & Invoice` : checkoutButtonLabel}
             </Button>
 
             <Button

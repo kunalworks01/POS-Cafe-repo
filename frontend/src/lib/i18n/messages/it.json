@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "Scorte",
     "tables": "Tavoli",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Menu online clienti"
   },
   "orders": {
     "active": "Attivo",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 articolo annullato · Tocca per visualizzare} other {# articoli annullati · Tocca per visualizzare}}",
     "voidingItem": "Annullamento...",
     "walkInCustomer": "Cliente senza prenotazione",
-    "whatsappFailed": "Impossibile aprire WhatsApp"
+    "whatsappFailed": "Impossibile aprire WhatsApp",
+    "unsettled": "Non saldato"
   },
   "pos": {
     "addCustomer": "Aggiungi cliente",

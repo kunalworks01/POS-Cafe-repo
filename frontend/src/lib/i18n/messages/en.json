@@ -638,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 voided item · Tap to view} other {# voided items · Tap to view}}",
     "voidingItem": "Voiding...",
     "walkInCustomer": "Walk-in Customer",
-    "whatsappFailed": "Failed to open WhatsApp"
+    "whatsappFailed": "Failed to open WhatsApp",
+    "unsettled": "Unsettled"
   },
   "pos": {
     "addCustomer": "Add Customer",

@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "Stock",
     "tables": "Tables",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Menu client en ligne"
   },
   "orders": {
     "active": "Actives",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 article annulé · Appuyer pour voir} other {# articles annulés · Appuyer pour voir}}",
     "voidingItem": "Annulation...",
     "walkInCustomer": "Client de passage",
-    "whatsappFailed": "Impossible d’ouvrir WhatsApp"
+    "whatsappFailed": "Impossible d’ouvrir WhatsApp",
+    "unsettled": "Non réglé"
   },
   "pos": {
     "addCustomer": "Ajouter un client",

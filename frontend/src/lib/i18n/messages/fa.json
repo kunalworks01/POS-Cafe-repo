@@ -467,7 +467,8 @@
     "whatsapp": "واتساپ",
     "inventory": "موجودی",
     "tables": "میزها",
-    "intelligence": "تحلیل هوش مصنوعی و هوش تجاری"
+    "intelligence": "تحلیل هوش مصنوعی و هوش تجاری",
+    "onlineOrder": "منوی آنلاین مشتری"
   },
   "orders": {
     "active": "فعال",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {۱ مورد باطل شده · برای مشاهده لمس کنید} other {# مورد باطل شده · برای مشاهده لمس کنید}}",
     "voidingItem": "در حال باطل کردن",
     "walkInCustomer": "مشتری حضوری",
-    "whatsappFailed": "باز کردن واتساپ انجام نشد"
+    "whatsappFailed": "باز کردن واتساپ انجام نشد",
+    "unsettled": "تسویه‌نشده"
   },
   "pos": {
     "addCustomer": "افزودن مشتری",

@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "Voorraad",
     "tables": "Tafels",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Online Klantenmenu"
   },
   "orders": {
     "active": "Actief",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 geannuleerd artikel - tik om te bekijken} other {# geannuleerde artikelen - tik om te bekijken}}",
     "voidingItem": "Annuleren...",
     "walkInCustomer": "Passerende klant",
-    "whatsappFailed": "Kan WhatsApp niet openen"
+    "whatsappFailed": "Kan WhatsApp niet openen",
+    "unsettled": "Niet verrekend"
   },
   "pos": {
     "addCustomer": "Klant toevoegen",

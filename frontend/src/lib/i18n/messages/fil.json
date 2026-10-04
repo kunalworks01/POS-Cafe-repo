@@ -467,7 +467,8 @@
     "user": "Gumagamit",
     "whatsapp": "WhatsApp",
     "inventory": "Imbentaryo",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Online Menu ng Customer"
   },
   "orders": {
     "active": "Aktibo",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 kinanselang aytem · I-tap para makita} other {# kinanselang aytem · I-tap para makita}}",
     "voidingItem": "Vino-void...",
     "walkInCustomer": "Walk-in na Kustomer",
-    "whatsappFailed": "Nabigong open WhatsApp"
+    "whatsappFailed": "Nabigong open WhatsApp",
+    "unsettled": "Hindi Naayos"
   },
   "pos": {
     "addCustomer": "Magdagdag ng Customer",

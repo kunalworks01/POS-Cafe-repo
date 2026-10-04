@@ -53,11 +53,13 @@ import { OrderCard } from '@/components/orders/OrderCard';
 
 type OrdersKey = keyof AppConfig['Messages']['orders'];
 
-type FilterType = 'all' | 'active' | 'unpaid' | 'held';
+type FilterType = 'all' | 'active' | 'unsettled' | 'online' | 'unpaid' | 'held';
 
 const tabLabelKey: Record<FilterType, OrdersKey> = {
   all: 'all',
   active: 'active',
+  unsettled: 'unsettled',
+  online: 'online',
   unpaid: 'unpaidBadge',
   held: 'held',
 };
@@ -453,9 +455,35 @@ export default function OrdersPage() {
     return true;
   };
 
+  const isOnlineOrder = (order: Order) => {
+    return order.type === 'online' || Boolean(order.online_platform);
+  };
+
+  const isOrderUnsettled = (order: Order) => {
+    if (order.status === 'cancelled') return false;
+    const isUnpaid = ['unpaid', 'partial'].includes(paymentStatusOf(order) || '');
+    if (!isUnpaid) return false;
+    return order.status === 'served' || order.status === 'ready' || (order.items || []).some((item) => item.status === 'served');
+  };
+
+  const handleMarkServed = async (orderId: number) => {
+    try {
+      await api.patch(`/orders/${orderId}/status`, { status: 'served' });
+      toast.success(tOrders('served') + ' — ' + tOrders('unsettled'));
+      fetchOrders();
+    } catch {
+      toast.error(tOrders('loadOrdersFailed'));
+    }
+  };
+
+  const unsettledCount = orders.filter(isOrderUnsettled).length;
+  const onlineCount = orders.filter((o) => isOnlineOrder(o) && isOrderActive(o)).length;
+
   const filteredOrders = orders.filter((order) => {
     // Tab filter
     if (tabFilter === 'active' && !isOrderActive(order)) return false;
+    if (tabFilter === 'unsettled' && !isOrderUnsettled(order)) return false;
+    if (tabFilter === 'online' && !isOnlineOrder(order)) return false;
     // Filter unpaid orders using resolved payment status since bills are generated at checkout.
     if (tabFilter === 'unpaid' && !['unpaid', 'partial'].includes(paymentStatusOf(order) || '')) return false;
 
@@ -468,8 +496,12 @@ export default function OrdersPage() {
       return false;
     }
     // Filter by type
-    if (filters.type && order.type !== filters.type) {
-      return false;
+    if (filters.type) {
+      if (filters.type === 'online') {
+        if (!isOnlineOrder(order)) return false;
+      } else if (order.type !== filters.type) {
+        return false;
+      }
     }
     // Filter by status
     if (filters.status === 'active' && !isOrderActive(order)) {
@@ -892,22 +924,36 @@ export default function OrdersPage() {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
         <h1 className="text-2xl font-bold text-foreground">{tNav('orders')}</h1>
-        <div className="flex gap-2">
-          {(['all', 'active', 'unpaid', 'held'] as FilterType[]).map((f) => (
-            <button
-              key={f}
-              onClick={() => setTabFilter(f)}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium ${
-                tabFilter === f
-                  ? 'bg-brand text-white'
-                  : 'bg-card text-muted-foreground border border-border hover:border-gray-400'
-              }`}
-            >
-              {tOrders(tabLabelKey[f])}
-            </button>
-          ))}
+        <div className="flex flex-wrap gap-2">
+          {(['all', 'active', 'unsettled', 'online', 'unpaid', 'held'] as FilterType[]).map((f) => {
+            const count = f === 'unsettled' ? unsettledCount : f === 'online' ? onlineCount : null;
+            return (
+              <button
+                key={f}
+                onClick={() => setTabFilter(f)}
+                className={`px-3 sm:px-4 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-colors ${
+                  tabFilter === f
+                    ? 'bg-brand text-white shadow-xs'
+                    : 'bg-card text-muted-foreground border border-border hover:border-gray-400'
+                }`}
+              >
+                <span>{tOrders(tabLabelKey[f])}</span>
+                {count != null && count > 0 && (
+                  <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold leading-none ${
+                    tabFilter === f
+                      ? 'bg-white text-brand'
+                      : f === 'unsettled'
+                      ? 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300'
+                      : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                  }`}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -1098,6 +1144,7 @@ export default function OrdersPage() {
                 setVoidItemModal({ orderId, itemId, productName, overridePin: '' })
               }
               onRestoreItem={restoreItem}
+              onMarkServed={handleMarkServed}
             />
           ))}
         </div>

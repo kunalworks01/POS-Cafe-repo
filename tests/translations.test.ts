@@ -1441,7 +1441,7 @@ function hiFallbackErrors(hiFlat: Record<string, string>, enFlat: Record<string,
 /** Bengali translation safeguards. */
 const BN_INTENTIONAL_IDENTICAL = new Set<string>([
   'nav.intelligence', // technical term
-  'auth.emailPlaceholder', 'dashboard.exportCsv', 'nav.pos', 'pos.addonPrice', 'pos.loadingEllipsis',
+  'auth.emailPlaceholder', 'common.brandName', 'dashboard.exportCsv', 'nav.pos', 'pos.addonPrice', 'pos.loadingEllipsis',
   'printTest.escpos', 'print.hsn', 'print.zReport.paymentCount', 'products.saleUnitCl',
   'products.saleUnitFlOz', 'products.saleUnitG', 'products.saleUnitL', 'products.saleUnitOz',
   'serverApp.emailPlaceholder', 'settings.apiKeyInputPlaceholder', 'settings.ipAddressPlaceholder',
@@ -1634,7 +1634,7 @@ function thFallbackErrors(thFlat: Record<string, string>, enFlat: Record<string,
 /** Nepali translation safeguards. */
 const NE_INTENTIONAL_IDENTICAL = new Set<string>([
   'nav.intelligence', // technical term
-  'auth.emailPlaceholder', 'dashboard.exportCsv', 'dashboard.ticketMethodCount',
+  'auth.emailPlaceholder', 'common.brandName', 'dashboard.exportCsv', 'dashboard.ticketMethodCount',
   'kds.emptyColumn', 'nav.kds', 'nav.pos', 'pos.addonPrice', 'pos.loadingEllipsis',
   'pos.tagCount', 'pos.taxLine', 'printTest.escpos', 'print.hsn',
   'print.zReport.paymentCount', 'products.addonSelectionRange', 'products.fieldSku',

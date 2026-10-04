@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { randomUUID } from 'crypto';
 import { getDatabase, now } from '../db';
 import { stripPhoneDigits, parsePhoneE164 } from '../lib/phone';
-import { notifyKdsUpdate } from '../services/kds';
+import { notifyKdsUpdate, notifyOrderUpdated } from '../services/kds';
 import { renderOrderInvoiceSms, CAFE_BASE_URL } from '../services/sms-templates';
 import { sendAmazonSnsSms } from '../services/amazon-sns';
 
@@ -129,7 +129,7 @@ publicRoutes.get('/cafe-info', (_req: Request, res: Response) => {
     instagram: '@the_hourglasscafe',
     currency: 'INR',
     currencySymbol: '₹',
-    address: 'Hourglass Cafe, Main Market, New Delhi',
+    address: 'C-42, Shastri Nagar, Ghaziabad, UP',
     hours: '10:00 AM - 11:00 PM (Everyday)',
     orderMode: 'Pickup & Takeaway',
     estimatedPrepTime: operational.estimatedWaitTime,
@@ -374,7 +374,7 @@ publicRoutes.post('/orders', (req: Request, res: Response) => {
         order_number, customer_id, user_id, type, delivery_address,
         special_instructions, subtotal, tax_amount, total, status,
         online_platform, external_order_id, created_at, updated_at
-      ) VALUES (?, ?, ?, 'takeaway', 'Store Pickup', ?, ?, ?, ?, 'pending', 'Hourglass Web', ?, ?, ?)
+      ) VALUES (?, ?, ?, 'online', 'Store Pickup', ?, ?, ?, ?, 'pending', 'Hourglass Web', ?, ?, ?)
     `).run(
       orderNumber,
       customerId,
@@ -436,8 +436,9 @@ publicRoutes.post('/orders', (req: Request, res: Response) => {
       } catch (_) {}
     }
 
-    // Broadcast to Kitchen Display System (KDS) immediately!
+    // Broadcast to Kitchen Display System (KDS) & POS immediately!
     notifyKdsUpdate();
+    notifyOrderUpdated();
 
     // Formulate Order SMS
     const waitTime = isPreorder ? operational.estimatedWaitTime : '15-20 minutes';
@@ -446,7 +447,7 @@ publicRoutes.post('/orders', (req: Request, res: Response) => {
 
     const orderSms = isPreorder
       ? `Hi, Your pre-order at Hourglass cafe is confirmed! Queue Priority: #${queuePriority} for 10:00 AM opening (First-Come, First-Served). Settle bill: ${payment_choice === 'pay_at_cafe' ? 'At counter with cash/UPI/Card' : `(${trackingUrl}#pay)`}. Post payment your invoice will be generated.`
-      : `Hi, Your order at Hourglass cafe will ready in 15-20 minutes, You can settle the bill here (${trackingUrl}#pay) or at the counter with cash/UPI/Credit card/Debit Card, Post payment your invoice will be generated`;
+      : `Hi, Your order at Hourglass cafe will be ready in 15-20 minutes, You can settle the bill here (${trackingUrl}#pay) or at the counter with cash/UPI/Credit card/Debit Card, Post payment your invoice will be generated`;
 
     if (finalPhone) {
       void sendAmazonSnsSms(finalPhone, orderSms).catch((err) => {
@@ -589,16 +590,13 @@ publicRoutes.get('/invoice/:order_number', (req: Request, res: Response) => {
           items: parsedItems,
           subtotal: order.subtotal,
           tax_amount: order.tax_amount,
-          cgst_2_5: Math.round((order.tax_amount / 2) * 100) / 100,
-          sgst_2_5: Math.round((order.tax_amount / 2) * 100) / 100,
           total: order.total,
           status: order.status,
           loyalty_points: loyaltyBalance,
           cafe: {
             name: 'Hourglass Cafe',
             tagline: 'Taste The Rhythm of Time',
-            gstin: '07AAAAA0000A1Z5',
-            address: 'Main Market, New Delhi',
+            address: 'C-42, Shastri Nagar, Ghaziabad, UP',
             phone: '+91 96431 77506',
             instagram: '@the_hourglasscafe',
           },
@@ -617,8 +615,7 @@ publicRoutes.get('/invoice/:order_number', (req: Request, res: Response) => {
       hour12: true,
     });
 
-    const cgst = (order.tax_amount / 2).toFixed(2);
-    const sgst = (order.tax_amount / 2).toFixed(2);
+    const taxFormatted = Number(order.tax_amount || 0).toFixed(2);
 
     const itemsRowsHtml = parsedItems.map((item, idx) => `
       <tr>
@@ -638,7 +635,7 @@ publicRoutes.get('/invoice/:order_number', (req: Request, res: Response) => {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tax Invoice #${order.order_number} - Hourglass Cafe</title>
+  <title>Invoice #${order.order_number} - Hourglass Cafe</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f5f2; margin: 0; padding: 16px; color: #2c2523; }
     .invoice-card { max-width: 540px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #e8e2dc; }
@@ -669,15 +666,15 @@ publicRoutes.get('/invoice/:order_number', (req: Request, res: Response) => {
     <div class="header">
       <h1>HOURGLASS CAFE</h1>
       <p>Taste The Rhythm of Time</p>
-      <div style="font-size: 11px; margin-top: 6px; color: #e8e2dc;">Main Market, New Delhi · Phone: +91 96431 77506</div>
-      <div style="font-size: 11px; color: #d4a373; margin-top: 2px;">GSTIN: 07AAAAA0000A1Z5 · Tax Invoice</div>
+      <div style="font-size: 11px; margin-top: 6px; color: #e8e2dc;">C-42, Shastri Nagar, Ghaziabad, UP · Phone: +91 96431 77506</div>
+      <div style="font-size: 11px; font-weight: 600; color: #d4a373; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Customer Invoice</div>
     </div>
     <div class="body">
       <div class="meta-box">
         <div>
           <div><strong>Invoice / Order:</strong> #${order.order_number}</div>
           <div><strong>Date:</strong> ${formattedDate}</div>
-          <div><strong>Order Type:</strong> Takeaway / Online Pickup</div>
+          <div><strong>Order Type:</strong> Online Pickup</div>
         </div>
         <div style="text-align: right;">
           <div><strong>Customer:</strong> ${customer?.name || 'Valued Customer'}</div>
@@ -705,14 +702,11 @@ publicRoutes.get('/invoice/:order_number', (req: Request, res: Response) => {
           <td style="color: #786c67;">Subtotal:</td>
           <td style="text-align: right; font-weight: 600;">₹${Number(order.subtotal).toFixed(2)}</td>
         </tr>
+        ${Number(order.tax_amount) > 0 ? `
         <tr>
-          <td style="color: #786c67;">CGST (2.5%):</td>
-          <td style="text-align: right; font-weight: 600;">₹${cgst}</td>
-        </tr>
-        <tr>
-          <td style="color: #786c67;">SGST (2.5%):</td>
-          <td style="text-align: right; font-weight: 600;">₹${sgst}</td>
-        </tr>
+          <td style="color: #786c67;">Tax:</td>
+          <td style="text-align: right; font-weight: 600;">₹${taxFormatted}</td>
+        </tr>` : ''}
         <tr class="grand-total">
           <td>Grand Total:</td>
           <td style="text-align: right;">₹${Number(order.total).toFixed(2)}</td>

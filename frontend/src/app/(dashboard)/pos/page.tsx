@@ -23,6 +23,8 @@ import TablePickerModal from '@/components/pos/TablePickerModal';
 import TableCheckoutModal from '@/components/pos/TableCheckoutModal';
 import PaymentModal from '@/components/pos/PaymentModal';
 import PrepaidCheckoutModal, { type PrepaidPayment, type PrepaidDiscount } from '@/components/pos/PrepaidCheckoutModal';
+import UnsettledOrdersModal from '@/components/pos/UnsettledOrdersModal';
+import OnlineOrdersModal from '@/components/pos/OnlineOrdersModal';
 import PosTopbar from '@/components/pos/PosTopbar';
 import { ShiftOpenModal } from '@/components/dashboard/ShiftOpenModal';
 import { ShiftCloseModal } from '@/components/dashboard/ShiftCloseModal';
@@ -131,6 +133,9 @@ export default function POSPage() {
   const [showCustomerPrompt, setShowCustomerPrompt] = useState(false);
   const [showPrepaidCheckout, setShowPrepaidCheckout] = useState(false);
   const [pendingOrder, setPendingOrder] = useState<Order | null>(null);
+  const [unsettledModalOpen, setUnsettledModalOpen] = useState(false);
+  const [onlineModalOpen, setOnlineModalOpen] = useState(false);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [supportError, setSupportError] = useState<{ title: string; subject: string; code: string; message: string; payload: Record<string, unknown> } | null>(null);
   const [sentTicketId, setSentTicketId] = useState<string | null>(null);
   const delivery = useSupportTicketStatus(sentTicketId);
@@ -557,6 +562,59 @@ export default function POSPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRestaurant, setBillingType, setTablesRequired, setKotPrintingEnabled]);
 
+  const fetchRecentOrders = useCallback(async () => {
+    try {
+      const { data } = await api.get('/orders', { params: { per_page: 50 } });
+      setRecentOrders(data.orders || []);
+    } catch {
+      // Silent background sync
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRecentOrders();
+    const interval = setInterval(fetchRecentOrders, 10000);
+    return () => clearInterval(interval);
+  }, [fetchRecentOrders]);
+
+  const isOrderUnsettled = (order: Order) => {
+    if (order.status === 'cancelled') return false;
+    const bills = order.bills && order.bills.length > 0 ? order.bills : order.bill ? [order.bill] : [];
+    const isPaid = bills.length > 0 && bills.every((b) => b.payment_status === 'paid');
+    if (isPaid) return false;
+    return order.status === 'served' || order.status === 'ready' || (order.items || []).some((item) => item.status === 'served');
+  };
+
+  const isOnlineOrder = (order: Order) => {
+    return order.type === 'online' || Boolean(order.online_platform && order.online_platform.length > 0);
+  };
+
+  const unsettledOrders = recentOrders.filter(isOrderUnsettled);
+  const onlineOrders = recentOrders.filter(isOnlineOrder);
+  const activeOnlineOrders = onlineOrders.filter((o) => !['completed', 'cancelled'].includes(o.status));
+
+  const handleCollectOrderPayment = async (order: Order) => {
+    try {
+      const { data } = await api.post('/bills/generate', { order_id: order.id });
+      setPaymentBill(data.bill);
+      setUnsettledModalOpen(false);
+      setOnlineModalOpen(false);
+    } catch {
+      toast.error('Failed to generate bill for checkout');
+    }
+  };
+
+  const handleMarkOrderServed = async (orderId: number) => {
+    try {
+      await api.patch(`/orders/${orderId}/status`, { status: 'served' });
+      toast.success('Order marked served — moved to Unsettled');
+      await fetchRecentOrders();
+      await refreshTables();
+    } catch {
+      toast.error('Failed to mark order as served');
+    }
+  };
+
   const handleProductClick = (product: Product) => {
     // Always open modal so user can add notes and adjust quantity
     setAddonProduct(product);
@@ -575,7 +633,7 @@ export default function POSPage() {
   // product grid — e.g. it could be a barcode field inside that modal.
   const anyModalOpen = showTablePicker || !!addonProduct || !!editingCartItem || !!checkoutTable
     || !!paymentBill || showCustomerPrompt || showPrepaidCheckout || cashDrawer.open
-    || shift.openModalOpen || shift.closeModalOpen;
+    || shift.openModalOpen || shift.closeModalOpen || unsettledModalOpen || onlineModalOpen;
 
   useBarcodeScanner((code) => {
     const scan = resolveScannedProduct(code, products);
@@ -1086,6 +1144,7 @@ export default function POSPage() {
     setCheckoutOverridePin(undefined);
     setCheckoutTable(null);
     refreshTables();
+    fetchRecentOrders();
 
     if (bill) {
       try {
@@ -1209,6 +1268,10 @@ export default function POSPage() {
         canUseShift={canUseShift}
         fullscreen={fullscreen}
         onToggleFullscreen={toggleFullscreen}
+        unsettledCount={unsettledOrders.length}
+        onShowUnsettled={() => setUnsettledModalOpen(true)}
+        onlineOrdersCount={activeOnlineOrders.length}
+        onShowOnlineOrders={() => setOnlineModalOpen(true)}
       />
 
       {/* Main content area */}
@@ -1340,6 +1403,26 @@ export default function POSPage() {
           onConfirm={handlePrepaidCheckout}
         />
       )}
+
+      {/* Unsettled Orders Modal (Serve first, collect payment & invoice later) */}
+      <UnsettledOrdersModal
+        isOpen={unsettledModalOpen}
+        onClose={() => setUnsettledModalOpen(false)}
+        orders={unsettledOrders}
+        onCollectPayment={handleCollectOrderPayment}
+        currency={currency}
+      />
+
+      {/* Online Customer Orders Modal */}
+      <OnlineOrdersModal
+        isOpen={onlineModalOpen}
+        onClose={() => setOnlineModalOpen(false)}
+        orders={onlineOrders}
+        onMarkServed={handleMarkOrderServed}
+        onCollectPayment={handleCollectOrderPayment}
+        currency={currency}
+        onRefresh={fetchRecentOrders}
+      />
 
     </>
   );

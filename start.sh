@@ -14,6 +14,7 @@ node kill-ports.js 3001 3002 3003 2>/dev/null || true
 echo ""
 echo "Starting servers..."
 echo "  • Public Web POS:       https://pos.15.207.179.83.nip.io"
+echo "  • Public Customer Menu: https://pos.15.207.179.83.nip.io/order"
 echo "  • Public Kitchen (KDS): https://pos.15.207.179.83.nip.io/kds"
 echo "  • Public Waiter App:    https://pos.15.207.179.83.nip.io/server-standalone"
 echo ""

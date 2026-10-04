@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "Persediaan",
     "tables": "Meja",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Menu Online Pelanggan"
   },
   "orders": {
     "active": "Aktif",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 item dibatalkan · Ketuk untuk melihat} other {# item dibatalkan · Ketuk untuk melihat}}",
     "voidingItem": "Membatalkan...",
     "walkInCustomer": "Pelanggan Datang Langsung",
-    "whatsappFailed": "Gagal membuka WhatsApp"
+    "whatsappFailed": "Gagal membuka WhatsApp",
+    "unsettled": "Belum Diselesaikan"
   },
   "pos": {
     "addCustomer": "Tambah Pelanggan",

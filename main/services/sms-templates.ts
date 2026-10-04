@@ -192,7 +192,7 @@ export function renderNewsletterHtml(data: NewsletterEmailData, customerName = '
       </div>
     </div>
     <div class="footer">
-      <p><strong>Hourglass Cafe</strong> · Main Market, New Delhi · ${CAFE_PHONE}</p>
+      <p><strong>Hourglass Cafe</strong> · C-42, Shastri Nagar, Ghaziabad, UP · ${CAFE_PHONE}</p>
       <p>Follow us on Instagram: <strong>@the_hourglasscafe</strong></p>
       <p style="margin-top: 12px; font-size: 11px;">You received this because you consented to updates from Hourglass Cafe. To unsubscribe, reply STOP.</p>
     </div>

@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "Склад",
     "tables": "Столы",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Онлайн-меню для клиентов"
   },
   "orders": {
     "active": "Активные",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 аннулированный элемент · Нажмите для просмотра} few {# аннулированных элемента · Нажмите для просмотра} many {# аннулированных элементов · Нажмите для просмотра} other {# аннулированного элемента · Нажмите для просмотра}}",
     "voidingItem": "Отмена позиции…",
     "walkInCustomer": "Клиент без стола",
-    "whatsappFailed": "Не удалось открыть WhatsApp."
+    "whatsappFailed": "Не удалось открыть WhatsApp.",
+    "unsettled": "Не рассчитано"
   },
   "pos": {
     "addCustomer": "Добавить клиента",

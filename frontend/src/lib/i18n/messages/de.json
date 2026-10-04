@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "Bestand",
     "tables": "Tische",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Kunden-Online-Menü"
   },
   "orders": {
     "active": "Aktiv",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 stornierter Artikel · Zum Anzeigen tippen} other {# stornierte Artikel · Zum Anzeigen tippen}}",
     "voidingItem": "Wird storniert…",
     "walkInCustomer": "Laufkunde",
-    "whatsappFailed": "WhatsApp konnte nicht geöffnet werden"
+    "whatsappFailed": "WhatsApp konnte nicht geöffnet werden",
+    "unsettled": "Unbeglichen"
   },
   "pos": {
     "addCustomer": "Kunde hinzufügen",

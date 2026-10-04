@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "इन्वेंटरी",
     "tables": "टेबल",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "ग्राहक ऑनलाइन मेनू"
   },
   "orders": {
     "active": "सक्रिय",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 रद्द आइटम · देखने के लिए टैप करें} other {# रद्द आइटम · देखने के लिए टैप करें}}",
     "voidingItem": "रद्द किया जा रहा है...",
     "walkInCustomer": "वॉक-इन ग्राहक",
-    "whatsappFailed": "WhatsApp खोलने में विफल"
+    "whatsappFailed": "WhatsApp खोलने में विफल",
+    "unsettled": "असमाप्त"
   },
   "pos": {
     "addCustomer": "ग्राहक जोड़ें",

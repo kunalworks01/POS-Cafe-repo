@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "在庫",
     "tables": "テーブル",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "顧客向けオンラインメニュー"
   },
   "orders": {
     "active": "有効",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {無効化した商品1点 · タップして表示} other {無効化した商品#点 · タップして表示}}",
     "voidingItem": "無効化中…",
     "walkInCustomer": "ウォークイン顧客",
-    "whatsappFailed": "WhatsAppを開けませんでした"
+    "whatsappFailed": "WhatsAppを開けませんでした",
+    "unsettled": "未精算"
   },
   "pos": {
     "addCustomer": "顧客を追加",

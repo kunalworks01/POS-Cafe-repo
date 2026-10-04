@@ -467,7 +467,8 @@
     "user": "使用者",
     "whatsapp": "WhatsApp",
     "inventory": "庫存",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "顧客線上菜單"
   },
   "orders": {
     "active": "進行中",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, other {# 件已作廢商品 · 點按檢視}}",
     "voidingItem": "作廢中…",
     "walkInCustomer": "散客",
-    "whatsappFailed": "開啟 WhatsApp 失敗"
+    "whatsappFailed": "開啟 WhatsApp 失敗",
+    "unsettled": "未結帳"
   },
   "pos": {
     "addCustomer": "新增顧客",

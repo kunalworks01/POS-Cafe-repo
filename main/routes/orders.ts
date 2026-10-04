@@ -226,8 +226,13 @@ router.get('/', orderReadRateLimit, requirePermission('orders.read'), (req: Requ
       }
     }
     if (req.query.type) {
-      wheres.push('type = ?');
-      params.push(req.query.type);
+      if (req.query.type === 'online') {
+        wheres.push('(type = ? OR (online_platform IS NOT NULL AND online_platform != \'\'))');
+        params.push(req.query.type);
+      } else {
+        wheres.push('type = ?');
+        params.push(req.query.type);
+      }
     }
     // Filter by UTC day or date range across indexed created_at column.
     if (req.query.today && req.query.today !== '0' && req.query.today !== 'false') {

@@ -467,7 +467,8 @@
     "user": "Përdoruesi",
     "whatsapp": "WhatsApp",
     "inventory": "Inventari",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Menyja Online e Klientit"
   },
   "orders": {
     "active": "Aktive",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 artikull i anuluar - prekni për ta parë} other {# artikuj të anuluar - prekni për t’i parë}}",
     "voidingItem": "Duke anuluar artikullin...",
     "walkInCustomer": "Klient pa rezervim",
-    "whatsappFailed": "Hapja e WhatsApp dështoi"
+    "whatsappFailed": "Hapja e WhatsApp dështoi",
+    "unsettled": "E papërfunduar"
   },
   "pos": {
     "addCustomer": "Shto klient",

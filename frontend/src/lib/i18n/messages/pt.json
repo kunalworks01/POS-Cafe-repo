@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "Estoque",
     "tables": "Mesas",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Cardápio Online do Cliente"
   },
   "orders": {
     "active": "Ativos",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 item cancelado · Toque para ver} other {# itens cancelados · Toque para ver}}",
     "voidingItem": "Anulando...",
     "walkInCustomer": "Cliente sem reserva",
-    "whatsappFailed": "Falha ao abrir o WhatsApp"
+    "whatsappFailed": "Falha ao abrir o WhatsApp",
+    "unsettled": "Não liquidado"
   },
   "pos": {
     "addCustomer": "Adicionar Cliente",

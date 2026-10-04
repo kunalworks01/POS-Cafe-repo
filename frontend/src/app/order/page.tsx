@@ -415,7 +415,7 @@ function OrderPageContent() {
               </div>
               <p className="text-xs font-mono text-stone-800 bg-white p-3 rounded-lg border border-amber-200 leading-relaxed shadow-xs">
                 {placedOrder.sms_notification ||
-                  `"Hi, Your order at Hourglass cafe will ready in 15-20 minutes, You can settle the bill here (https://pos.15.207.179.83.nip.io/order?status=${placedOrder.order_number}#pay) or at the counter with cash/UPI/Credit card/Debit Card, Post payment your invoice will be generated"`}
+                  `"Hi, Your order at Hourglass cafe will be ready in 15-20 minutes, You can settle the bill here (https://pos.15.207.179.83.nip.io/order?status=${placedOrder.order_number}#pay) or at the counter with cash/UPI/Credit card/Debit Card, Post payment your invoice will be generated"`}
               </p>
             </div>
           </div>
@@ -650,7 +650,7 @@ function OrderPageContent() {
           </div>
           <div className="flex items-center gap-2 text-xs font-semibold text-stone-600 bg-white px-3 py-2 rounded-xl border border-stone-200 shrink-0">
             <MapPin size={14} className="text-amber-700" />
-            <span>Store Pickup: Main Market, New Delhi</span>
+            <span>Store Pickup: C-42, Shastri Nagar, Ghaziabad, UP</span>
           </div>
         </div>
 

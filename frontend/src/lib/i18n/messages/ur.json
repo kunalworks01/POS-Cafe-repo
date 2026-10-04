@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "اسٹاک",
     "tables": "میزیں",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "کسٹمر آن لائن مینو"
   },
   "orders": {
     "active": "فعال",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 منسوخ آئٹم · دیکھنے کے لیے ٹیپ کریں} other {# منسوخ آئٹمز · دیکھنے کے لیے ٹیپ کریں}}",
     "voidingItem": "منسوخ کیا جا رہا ہے...",
     "walkInCustomer": "بغیر بکنگ گاہک",
-    "whatsappFailed": "WhatsApp نہیں کھل سکا"
+    "whatsappFailed": "WhatsApp نہیں کھل سکا",
+    "unsettled": "غیر طے شدہ"
   },
   "pos": {
     "addCustomer": "گاہک شامل کریں",

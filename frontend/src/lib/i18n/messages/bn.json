@@ -467,7 +467,8 @@
     "whatsapp": "হোয়াটসঅ্যাপ",
     "inventory": "ইনভেন্টরি",
     "tables": "টেবিল",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "গ্রাহক অনলাইন মেনু"
   },
   "orders": {
     "active": "সক্রিয়",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1টি বাতিল করা আইটেম · দেখতে ট্যাপ করুন} other {#টি অকার্যকর আইটেম · দেখতে আলতো চাপুন}}",
     "voidingItem": "ভয়ডিং...",
     "walkInCustomer": "ওয়াক-ইন গ্রাহক",
-    "whatsappFailed": "WhatsApp খুলতে ব্যর্থ হয়েছে।"
+    "whatsappFailed": "WhatsApp খুলতে ব্যর্থ হয়েছে।",
+    "unsettled": "নিষ্পত্তিহীন"
   },
   "pos": {
     "addCustomer": "গ্রাহক যোগ করুন",

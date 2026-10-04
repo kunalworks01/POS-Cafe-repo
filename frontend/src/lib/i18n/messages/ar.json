@@ -467,7 +467,8 @@
     "user": "المستخدم",
     "whatsapp": "واتساب",
     "inventory": "المخزون",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "قائمة العملاء عبر الإنترنت"
   },
   "orders": {
     "active": "نشط",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, zero {لا توجد عناصر ملغاة} one {عنصر واحد ملغى · اضغط للعرض} two {عنصران ملغيان · اضغط للعرض} few {# عناصر ملغاة · اضغط للعرض} many {# عنصرًا ملغى · اضغط للعرض} other {# عنصر ملغى · اضغط للعرض}}",
     "voidingItem": "إلغاء...",
     "walkInCustomer": "العميل العابر",
-    "whatsappFailed": "فشل فتح تطبيق WhatsApp"
+    "whatsappFailed": "فشل فتح تطبيق WhatsApp",
+    "unsettled": "غير مسوّى"
   },
   "pos": {
     "addCustomer": "إضافة عميل",

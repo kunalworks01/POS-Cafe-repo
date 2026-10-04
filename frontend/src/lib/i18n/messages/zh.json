@@ -467,7 +467,8 @@
     "user": "用户",
     "whatsapp": "WhatsApp",
     "inventory": "库存",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "顾客线上菜单"
   },
   "orders": {
     "active": "进行中",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, other {# 件已作废商品 · 点按查看}}",
     "voidingItem": "作废中…",
     "walkInCustomer": "散客",
-    "whatsappFailed": "打开 WhatsApp 失败"
+    "whatsappFailed": "打开 WhatsApp 失败",
+    "unsettled": "未结账"
   },
   "pos": {
     "addCustomer": "添加顾客",

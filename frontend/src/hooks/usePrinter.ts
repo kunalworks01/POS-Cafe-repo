@@ -226,11 +226,9 @@ export const usePrinterStore = create<PrinterState>()(
             } catch (err: unknown) {
               const e = err as { response?: { data?: { error?: string; detail?: string } }; message?: string };
               const errorMsg = e.response?.data?.detail || e.response?.data?.error || e.message || 'Print failed';
-              if (errorMsg.includes('No default printer configured')) {
-                toast('No thermal printer configured — printing via system print', { icon: 'ℹ️' });
-                return await executeBrowserPrint();
-              }
-              throw new Error(errorMsg);
+              console.warn('[Printer] Hardware print failed, falling back to browser print:', errorMsg);
+              toast('Thermal printer unavailable — printing via system dialog', { icon: 'ℹ️' });
+              return await executeBrowserPrint();
             }
           }
 

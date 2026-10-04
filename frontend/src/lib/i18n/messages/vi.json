@@ -467,7 +467,8 @@
     "whatsapp": "WhatsApp",
     "inventory": "Kho",
     "tables": "Bàn",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Thực đơn trực tuyến cho khách"
   },
   "orders": {
     "active": "Đang hoạt động",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 món đã hủy · Chạm để xem} other {# món đã hủy · Chạm để xem}}",
     "voidingItem": "Đang hủy món...",
     "walkInCustomer": "Khách vãng lai",
-    "whatsappFailed": "Không thể mở WhatsApp"
+    "whatsappFailed": "Không thể mở WhatsApp",
+    "unsettled": "Chưa thanh toán"
   },
   "pos": {
     "addCustomer": "Thêm khách hàng",

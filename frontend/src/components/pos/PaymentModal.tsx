@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Wallet, ArrowLeftRight, CheckCircle2, Sparkles, User, Percent, Send, ChevronDown } from 'lucide-react';
+import { X, Wallet, ArrowLeftRight, CheckCircle2, Sparkles, User, Percent, Send, ChevronDown, Printer, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import type { Bill } from '@/lib/types';
 import TaxBreakdown from '@/components/pos/TaxBreakdown';
 import { resolveTaxComponents } from '@/lib/printer/tax-components';
+import { usePrinterStore } from '@/hooks/usePrinter';
+import { showPrintWarningsToast } from '@/lib/printer/warnings-toast';
 import { useCartStore } from '@/store/cart';
 import { useConfirm } from '@/hooks/use-confirm';
 import { useTranslations, useLocale, type AppConfig } from 'use-intl';
@@ -98,7 +100,9 @@ export default function PaymentModal({ bill, initialOverridePin, onClose, onPaid
   useEffect(() => {
     idempotencyKeyRef.current = null;
   }, [bill.id]);
+  const { printBill } = usePrinterStore();
   const [justPaid, setJustPaid] = useState(false);
+  const [printingInvoice, setPrintingInvoice] = useState(false);
   const [sendingWa, setSendingWa] = useState(false);
   const [pointsEarned, setPointsEarned] = useState(0);
   const [payments, setPayments] = useState<Payment[]>(
@@ -473,6 +477,35 @@ export default function PaymentModal({ bill, initialOverridePin, onClose, onPaid
     }
   };
 
+  const handlePrintInvoice = async () => {
+    setPrintingInvoice(true);
+    try {
+      const { data } = await api.get(`/bills/${bill.id}`);
+      const latestBill = (data.bill || bill) as Bill;
+      const tenantForPrint = {
+        business_name: currentTenant?.business_name || 'Hourglass Cafe',
+        currency: currentTenant?.currency || 'INR',
+        country: currentTenant?.country || 'IN',
+        timezone: currentTenant?.timezone || 'Asia/Kolkata',
+        currency_display: currentTenant?.currency_display,
+        number_digits: currentTenant?.number_digits,
+        calendar: currentTenant?.calendar,
+      };
+      const warnings = await printBill(latestBill, tenantForPrint);
+      if (warnings && warnings.length > 0) {
+        showPrintWarningsToast(warnings);
+      }
+      toast.success(tOrders('receiptSent'));
+    } catch (err: any) {
+      console.error('[PaymentModal] Print failed:', err);
+      toast.error('Print failed. Opening invoice preview instead...');
+      const orderNum = bill.order?.order_number || bill.id;
+      window.open(`/api/public/invoice/${orderNum}`, '_blank');
+    } finally {
+      setPrintingInvoice(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
       <div className="bg-card w-full sm:max-w-4xl sm:max-h-[95vh] sm:flex sm:flex-col rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden">
@@ -804,6 +837,38 @@ export default function PaymentModal({ bill, initialOverridePin, onClose, onPaid
         <div className="px-5 pb-5 border-t border-border pt-3 space-y-2">
           {justPaid ? (
             <>
+              <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 rounded-xl p-3 text-center mb-1">
+                <CheckCircle2 size={24} className="mx-auto text-emerald-600 dark:text-emerald-400 mb-1" />
+                <h4 className="text-sm font-bold text-emerald-900 dark:text-emerald-200">
+                  Payment Recorded & Order Settled
+                </h4>
+                <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">
+                  Order #{bill.order?.order_number || bill.bill_number || bill.id} is ready for invoicing.
+                </p>
+              </div>
+
+              {/* 1-Click Print Invoice */}
+              <Button
+                onClick={handlePrintInvoice}
+                disabled={printingInvoice}
+                className="w-full bg-brand hover:bg-brand-hover text-white font-semibold flex items-center justify-center gap-2 shadow-xs"
+                size="lg"
+              >
+                <Printer size={18} />
+                {printingInvoice ? 'Printing Invoice...' : 'Print / Download Invoice'}
+              </Button>
+
+              {/* View Digital Customer Invoice */}
+              <a
+                href={`/api/public/invoice/${bill.order?.order_number || bill.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="touch-target w-full py-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-semibold text-foreground flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <FileText size={15} />
+                View Customer Digital Invoice ↗
+              </a>
+
               {cartCustomer?.phone && (
                 isWhatsAppReady ? (
                   <Button

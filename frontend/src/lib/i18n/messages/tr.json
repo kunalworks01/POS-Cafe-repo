@@ -467,7 +467,8 @@
     "user": "Kullanıcı",
     "whatsapp": "WhatsApp",
     "inventory": "Stok",
-    "intelligence": "AI Analytics & BI"
+    "intelligence": "AI Analytics & BI",
+    "onlineOrder": "Müşteri Çevrimiçi Menüsü"
   },
   "orders": {
     "active": "Aktif",
@@ -637,7 +638,8 @@
     "voidedItemsCount": "{count, plural, one {1 iptal edilen ürün · Görüntülemek için dokunun} other {# iptal edilen ürün · Görüntülemek için dokunun}}",
     "voidingItem": "İptal ediliyor...",
     "walkInCustomer": "Giriş Müşterisi",
-    "whatsappFailed": "WhatsApp gönderimi başarısız"
+    "whatsappFailed": "WhatsApp gönderimi başarısız",
+    "unsettled": "Hesaplanmamış"
   },
   "pos": {
     "addCustomer": "Müşteri Ekle",
