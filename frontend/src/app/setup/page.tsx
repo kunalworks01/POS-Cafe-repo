@@ -49,9 +49,9 @@ const SELECTABLE_LANGUAGES: Language[] = (Object.keys(LANGUAGES) as Language[]).
   (lang) => LANGUAGES[lang].selectable,
 );
 
-// Mirrors main/services/cloud-sync.ts DEFAULT_CLOUD_SERVER_URL — kept in sync
-// manually since the frontend can't import backend TS modules directly.
-const DEFAULT_CLOUD_SERVER_URL = 'https://blue.flopos.com/';
+// Default AWS Cloud Server URL for Hourglass POS on AWS EC2 & S3 Infrastructure
+const DEFAULT_AWS_CLOUD_SERVER_URL = 'https://pos.15.207.179.83.nip.io';
+const DEFAULT_CLOUD_SERVER_URL = DEFAULT_AWS_CLOUD_SERVER_URL;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SUSPECT_EMAIL_TLDS = new Set(['example', 'invalid', 'lcaol', 'local', 'localhost', 'test']);
 
@@ -119,7 +119,8 @@ export default function SetupPage() {
   const ownerApprovalPinValid = /^\d{4,6}$/.test(ownerApprovalPin) && ownerApprovalPin === ownerApprovalPinConfirm;
 
   const cloudEnabled = true;
-  const [cloudServerUrl, setCloudServerUrl] = useState(DEFAULT_CLOUD_SERVER_URL);
+  const [cloudProvider, setCloudProvider] = useState<'aws' | 'custom'>('aws');
+  const [cloudServerUrl, setCloudServerUrl] = useState(DEFAULT_AWS_CLOUD_SERVER_URL);
 
   const isPasswordValid = (password: string) => {
     if (!password || password.length < 8) return false;
@@ -285,7 +286,7 @@ export default function SetupPage() {
         owner_approval_pin: ownerApprovalPin,
         owner_approval_pin_confirmation: ownerApprovalPinConfirm,
         cloud_sync_enabled: true,
-        cloud_server_url: cloudServerUrl.trim() || DEFAULT_CLOUD_SERVER_URL,
+        cloud_server_url: (cloudProvider === 'aws' ? DEFAULT_AWS_CLOUD_SERVER_URL : cloudServerUrl.trim()) || DEFAULT_AWS_CLOUD_SERVER_URL,
         email_product_updates: productUpdates,
         email_marketing: marketing,
         ...countryPayload,
@@ -859,32 +860,93 @@ export default function SetupPage() {
                   <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
                     <Cloud className="w-5 h-5 text-primary" />
                   </div>
-                  <h2 className="text-xl font-semibold mb-2">{t('cloudTitle')}</h2>
-                  <p className="text-muted-foreground text-sm">{t('cloudSubtitle')}</p>
+                  <h2 className="text-xl font-semibold mb-2">Cloud Database &amp; Sync</h2>
+                  <p className="text-muted-foreground text-sm">
+                    Connect your POS with AWS Cloud infrastructure to ensure all-time sales records, orders, and receipts are safely preserved and synchronized.
+                  </p>
                 </div>
 
-                <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 border-gray-200">
-                  <input
-                    type="checkbox"
-                    checked={cloudEnabled}
-                    disabled
-                    className="mt-0.5 h-4 w-4 rounded border-gray-300"
-                  />
-                  <span>
-                    <span className="font-medium text-foreground">{t('cloudManagedAutomaticallyTitle')}</span>
-                    <span className="block text-sm text-muted-foreground mt-1">{t('cloudManagedAutomaticallyDescription')}</span>
-                  </span>
-                </label>
+                <div className="grid gap-4">
+                  {/* Option 1: AWS Cloud (Default) */}
+                  <div
+                    onClick={() => {
+                      setCloudProvider('aws');
+                      setCloudServerUrl(DEFAULT_AWS_CLOUD_SERVER_URL);
+                    }}
+                    className={`p-4 rounded-xl border-2 text-start transition-all cursor-pointer ${
+                      cloudProvider === 'aws'
+                        ? 'border-primary bg-primary/5 shadow-sm'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                        <Cloud className="w-6 h-6 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-foreground">AWS Cloud Infrastructure</span>
+                          <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs text-primary-foreground font-medium">
+                            Default (Recommended)
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Connected with AWS EC2 &amp; S3 Cloud Database (ap-south-1) for real-time order sync and permanent all-time sales record preservation.
+                        </p>
+                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs bg-muted/60 p-2.5 rounded-lg border border-border">
+                          <div>
+                            <span className="text-muted-foreground block">AWS Server Host:</span>
+                            <span className="font-mono text-foreground font-medium truncate block">pos.15.207.179.83.nip.io</span>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground block">AWS Region:</span>
+                            <span className="font-medium text-foreground">ap-south-1 (Mumbai)</span>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <span className="text-muted-foreground block">AWS Database Storage:</span>
+                            <span className="font-mono text-foreground text-[11px] truncate block">s3://hourglass-pos-database-backup-866874944450</span>
+                          </div>
+                        </div>
+                      </div>
+                      {cloudProvider === 'aws' && <Check className="w-5 h-5 text-primary shrink-0" />}
+                    </div>
+                  </div>
 
-                {cloudEnabled && (
-                  <div className="space-y-2">
+                  {/* Option 2: Custom Server */}
+                  <div
+                    onClick={() => setCloudProvider('custom')}
+                    className={`p-4 rounded-xl border-2 text-start transition-all cursor-pointer ${
+                      cloudProvider === 'custom'
+                        ? 'border-primary bg-primary/5 shadow-sm'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center shrink-0">
+                        <Database className="w-5 h-5 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-foreground">Custom / Private Cloud URL</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Specify a custom cloud relay or self-hosted endpoint URL.
+                        </p>
+                      </div>
+                      {cloudProvider === 'custom' && <Check className="w-5 h-5 text-primary shrink-0" />}
+                    </div>
+                  </div>
+                </div>
+
+                {cloudProvider === 'custom' && (
+                  <div className="space-y-2 pt-2">
                     <Label htmlFor="cloud-server-url">{t('cloudUrlLabel')}</Label>
                     <Input
                       id="cloud-server-url"
                       type="url"
                       value={cloudServerUrl}
                       onChange={(e) => setCloudServerUrl(e.target.value)}
-                      placeholder={DEFAULT_CLOUD_SERVER_URL}
+                      placeholder={DEFAULT_AWS_CLOUD_SERVER_URL}
                       dir="ltr"
                     />
                     <p className="text-xs text-muted-foreground">{t('cloudUrlHint')}</p>
@@ -892,7 +954,7 @@ export default function SetupPage() {
                 )}
 
                 <p className="text-xs text-muted-foreground bg-muted rounded-lg p-3">
-                  {cloudEnabled ? t('cloudRecoveryNoteEnabled') : t('cloudRecoveryNoteDisabled')}
+                  All sales transactions, bills, order histories, and reports are safely secured with AWS cloud infrastructure.
                 </p>
 
                 <Button onClick={() => setStep(6)} className="w-full" size="lg">

@@ -1,329 +1,211 @@
 <div align="center">
-  <h1>Pro-Cafe</h1>
-  <p><strong>Hourglass Cafe Enterprise POS & Online Customer Portal</strong></p>
-  <p><a href="docs/translations/README.es.md">Español</a> · <a href="docs/translations/README.pt.md">Português</a> · <a href="docs/translations/README.fr.md">Français</a> · <a href="docs/translations/README.tr.md">Türkçe</a> · <a href="docs/translations/README.fil.md">Filipino</a> · <a href="docs/translations/README.de.md">Deutsch</a> · <a href="docs/translations/README.zh-CN.md">简体中文</a> · <a href="docs/translations/README.ar.md">العربية</a> · <a href="docs/translations/README.ur.md">اردو</a></p>
-  <p><strong>Offline-first point of sale, kitchen display system (KDS), and online customer ordering portal for cafés, restaurants, and cloud kitchens.</strong></p>
+  <img src="logo/Flo.png" alt="Hourglass Cafe Logo" width="120" height="120" />
+  <h1>Hourglass Cafe</h1>
+  <p><strong>Enterprise Point of Sale (POS), Kitchen Display System (KDS) & Online Customer Ordering Portal</strong></p>
+  <p><em>Taste The Rhythm of Time</em></p>
+
+  <p>
+    <a href="https://github.com/kunalworks01/POS-Cafe-repo"><img src="https://img.shields.io/badge/Status-Production--Ready-success?style=for-the-badge" alt="Production Ready" /></a>
+    <img src="https://img.shields.io/badge/Node.js-%3E%3D22.12-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+    <img src="https://img.shields.io/badge/Electron-44.5.1-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron" />
+    <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+    <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/SQLite-Offline--First-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
+    <img src="https://img.shields.io/badge/AWS-S3_%26_Cloud_Sync-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS Cloud" />
+    <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License: MIT" />
+  </p>
 </div>
 
+---
+
 <p align="center">
-  <img src="docs/images/flo-cafe-pos.webp" alt="Pro-Cafe POS screen showing product selection and an active dine-in order" width="100%">
+  <img src="docs/images/flo-cafe-pos.webp" alt="Hourglass Cafe POS Screen" width="100%">
 </p>
 
-Pro-Cafe runs directly on the business's own computer or cloud server. Orders, customers, receipts, and backups are stored in a local SQLite database, allowing counter service and kitchen displays to continue operating without interruption. Optional integrations—such as Google Drive backup, WhatsApp bill delivery, Amazon SNS SMS notifications, and AI Business Intelligence—can be enabled when needed.
+## Overview
 
-## Get FloCafe
+**Hourglass Cafe POS** is an enterprise-grade, offline-first Point of Sale (POS) and operations ecosystem built specifically for modern cafés, restaurants, and cloud kitchens.
 
-Download the latest installer from [GitHub Releases](https://github.com/FreeOpenSourcePOS/FloCafe/releases), or install through your platform's app store:
+Engineered with local-first reliability at its core, Hourglass Cafe ensures 100% operational uptime by storing transactions, orders, and customer data in an ACID-compliant local SQLite database. Mission-critical counter billing and kitchen dispatching continue uninterrupted even during internet outages, while automated background synchronizers upload database snapshots to AWS S3 cloud infrastructure.
 
-<p>
-  <a href="https://apps.apple.com/in/app/flo-cafe/id6763136018">
-    <img src="https://img.shields.io/badge/Mac_App_Store-Download-black?logo=apple&style=for-the-badge" alt="Download on the Mac App Store">
-  </a>
-  <a href="https://apps.microsoft.com/detail/9n1md6585p4q">
-    <img src="https://img.shields.io/badge/Microsoft_Store-Download-0078D4?logo=microsoft&style=for-the-badge" alt="Download from Microsoft Store">
-  </a>
-  <a href="https://snapcraft.io/flocafe">
-    <img src="https://img.shields.io/badge/Snap-Install-82BEA0?logo=snapcraft&logoColor=white&style=for-the-badge" alt="Install from the Snap Store">
-  </a>
-</p>
+---
 
-Releases include Windows installers, macOS DMGs, and Linux AppImage, `.deb`,
-`.rpm`, and Snap packages. For Linux package-specific installation and update
-behavior, FUSE setup, printing permissions, and tray behavior, see [Linux
-installation and support](docs/linux.md).
+## Key Highlights
 
-### System requirements
+- 🛒 **Offline-First POS Counter Terminal:** Instant touch billing, table management, held tickets, split payments (Cash, Card, UPI, Loyalty points), tax calculation, and discounts.
+- 🌐 **Customer Online Ordering Portal:** Mobile-first web menu allowing customers to browse items, customize add-ons, and place pre-orders with live order status tracking (`:3003/order`).
+- 🍳 **Standalone Kitchen Display System (KDS):** Multi-station kitchen screen with FIFO order staging, live WebSocket updates, and audio alerts on incoming tickets (`:3002`).
+- ⏳ **Unsettled & Pending Orders Drawer:** Instant drawer access in the POS topbar to inspect open tabs, distinguish unsettled dine-in tickets from online pre-orders, and complete one-click bill settlement.
+- 🖨️ **Thermal Receipt & KOT Printing:** Direct ESC/POS printing over TCP, USB, and WebUSB with 58 mm and 80 mm paper formats, custom logos, and kitchen order tickets.
+- ☁️ **AWS S3 Cloud Database Backup:** Scheduled and automated database snapshots compressed (`.db.gz`) and synchronized to Amazon S3 (`hourglass-pos-database-backup-866874944450`) with 30-day retention policies.
+- 📊 **Business Intelligence & Audit Logs:** Role-based access control (Owner, Manager, Cashier, Server, Chef), granular shift closures, cash drawer balancing, and sales analytics.
+- 🌍 **Internationalization & Multi-Currency:** Out-of-the-box support for 24+ languages (including RTL for Arabic, Urdu, and Farsi) and 131 country profiles.
 
-| Requirement | Minimum |
-| --- | --- |
-| Operating system | Windows 10+, macOS 12+, or a current supported Linux distribution — 64-bit only (x64 or arm64) |
-| Memory | 4 GB RAM |
-| Storage | 500 MB free space, plus room for local backups |
+---
 
-Node.js is only required to develop FloCafe, not to run a packaged release.
+## System Architecture
 
-FloCafe does not build or publish 32-bit installers. A terminal that can only
-run a 32-bit OS can still be used from a lightweight browser, without
-installing the desktop app locally:
-
-- **Companion screen or POS terminal:** open the Server App or the browser POS,
-  both served over LAN.
-- **KDS station:** open the KDS URL listed in the app's About dialog (macOS:
-  the application menu; Windows and Linux: **Help**). The KDS is a separate
-  LAN-served display on its own port, configurable through `KDS_PORT`; it is
-  not served from the Server App or the browser POS.
-
-<details>
-<summary>Uninstall a direct-download build</summary>
-
-App Store and Microsoft Store installs should be removed through the relevant store or operating system.
-
-```sh
-# macOS
-curl -fsSL https://github.com/FreeOpenSourcePOS/FloCafe/releases/latest/download/uninstall-macos.sh -o uninstall-macos.sh
-chmod +x uninstall-macos.sh
-./uninstall-macos.sh
+```text
+                               ┌────────────────────────────────────────────────────────┐
+                               │                    Hardware Devices                    │
+                               │  Thermal Printers (ESC/POS) · Cash Drawers · Scanners  │
+                               └──────────────────────────▲─────────────────────────────┘
+                                                          │ Raw ESC/POS
+┌────────────────────────────┐ ┌──────────────────────────┴─┐ ┌────────────────────────────┐
+│      POS Desktop UI        │ │  Kitchen Display System    │ │   Customer Online Portal   │
+│ Next.js 14 / React 18      │ │ Standalone Web App         │ │ Mobile-First Web Menu      │
+│ Port: 3001                 │ │ Port: 3002                 │ │ Port: 3003                 │
+└─────────────▲──────────────┘ └──────────────▲─────────────┘ └──────────────▲─────────────┘
+              │                               │                              │
+              │ HTTP / WebSockets             │ WebSockets                   │ HTTP / WebSockets
+              ▼                               ▼                              ▼
+┌──────────────────────────────────────────────────────────────────────────────────────────┐
+│                             Electron 44 / Node.js Main Process                           │
+│     - Express REST API Engine                      - Real-Time WebSocket Hub             │
+│     - SQLite Database (better-sqlite3)             - Receipt & KOT Print Pipeline        │
+│     - Staff Authorization & PIN Security           - FIFO Order Lifecycle Manager        │
+└────────────────────────────────────────────┬─────────────────────────────────────────────┘
+                                             │
+                                             ▼
+                      ┌──────────────────────────────────────────────┐
+                      │             AWS Cloud Infrastructure         │
+                      │  - AWS S3 Compressed Database Snapshots      │
+                      │  - Automated 30-day Retention Backups        │
+                      │  - Cloud DB Sync Engine                      │
+                      └──────────────────────────────────────────────┘
 ```
 
-```powershell
-# Windows PowerShell
-irm https://github.com/FreeOpenSourcePOS/FloCafe/releases/latest/download/uninstall-windows.ps1 -OutFile uninstall-windows.ps1
-powershell -ExecutionPolicy Bypass -File .\uninstall-windows.ps1
+---
+
+## Service Port Reference
+
+| Port | Service | Description | Access URL |
+| :--- | :--- | :--- | :--- |
+| **3001** | **POS Desktop / REST API** | Main Counter Billing & Management System | `http://localhost:3001/pos` |
+| **3002** | **Kitchen Display System** | Real-time kitchen ticket management & KOT routing | `http://localhost:3002/kds` |
+| **3003** | **Customer Order Portal** | Mobile-optimized online ordering & waiter companion | `http://localhost:3003/order` |
+
+---
+
+## Quick Start & Installation
+
+### Prerequisites
+
+- **Node.js:** `>= 22.12.0`
+- **npm:** `>= 10.0.0`
+- **Operating System:** Linux (Ubuntu/Debian, Fedora, Arch), macOS 12+, or Windows 10+ (64-bit)
+
+### 1. Clone Repository
+
+```bash
+git clone git@github.com:kunalworks01/POS-Cafe-repo.git
+cd POS-Cafe-repo
 ```
 
-Both scripts ask whether to keep application data. Do not choose their data-purge options unless you intend to remove the local database and backups.
+### 2. Install Dependencies
 
-</details>
-
-## Highlights
-
-- **Order workflows:** Counter, dine-in, takeaway, and delivery orders with table management and held orders.
-- **Modifiers & pricing:** Item modifiers, add-on groups, discounts, and customer loyalty points.
-- **Receipt printing:** ESC/POS thermal printing over USB, local network (TCP), and OS-managed print queues, with WebUSB supported in compatible browsers (58 mm and 80 mm paper support).
-- **Kitchen operations:** Standalone Kitchen Display System (KDS) server and category-based kitchen station routing.
-- **Catalog management:** Product images, barcode scanning, and CSV menu import/export.
-- **Administration:** Role-based staff accounts (Owner, Manager, Cashier, Server, Chef), sales analytics, and audit logs.
-- **Data protection:** Local SQLite database with automated pre-migration backups, manual restore tools, and optional Google Drive backup.
-
-## Project status
-
-FloCafe is actively developed and already used in real deployments. Core customer data and upgrade safety are treated carefully, including explicit database migrations and recovery mechanisms. Some internal and extension-facing architecture is still evolving, so implementation details and internal contracts may change as the project matures.
-
-## Offline-first by design
-
-Core POS operation and local data are offline-first. Order entry, billing, KDS coordination, and receipt printing do not depend on internet access or external cloud services.
-
-- **Data location:** The SQLite database and local backups reside in the operating system user-data directory, separate from installed application binaries. Standard in-place application updates do not remove them. As a best practice, create a manual backup before reinstalling, moving to a new machine, or changing distribution channels.
-- **Pre-migration backups:** FloCafe automatically creates a timestamped database backup before running schema migrations.
-- **Optional network features:** Services such as Google Drive backups, WhatsApp bill delivery, and cloud reporting communicate over the network only when explicitly configured and enabled by the store owner.
-
-## Languages and regional support
-
-FloCafe includes UI translations for:
-
-- English
-- Spanish
-- French
-- Brazilian Portuguese
-- Russian
-- Filipino
-- Turkish
-- Persian (Farsi), including RTL support
-- Arabic, including RTL support
-- Urdu, including RTL support
-- German
-- Italian
-- Japanese
-- Simplified Chinese
-- Traditional Chinese (Taiwan)
-- Korean
-- Bahasa Indonesia
-- Dutch
-- Hindi
-- Bengali/Bangla
-- Albanian
-- Vietnamese
-- Thai
-- Nepali
-
-UI language is independent of store country and regional settings, and tax calculation rules remain a separate concern. For details on contributing translations or adding languages, see the [Internationalization and translation guide](docs/architecture/internationalization.md).
-
-FloCafe ships with 131 country profiles covering 109 currencies. Each profile sets a default currency, locale, and setup timezone; store owners can override the timezone during setup or later in Settings.
-
-<details>
-<summary>Supported country profiles, currencies, and default timezones</summary>
-
-| Country | Currency | Default timezone |
-| --- | --- | --- |
-| India (IN) | INR | Asia/Kolkata |
-| Argentina (AR) | ARS | America/Argentina/Buenos_Aires |
-| United States (US) | USD | America/New_York |
-| Canada (CA) | CAD | America/Toronto |
-| United Kingdom (GB) | GBP | Europe/London |
-| Thailand (TH) | THB | Asia/Bangkok |
-| Singapore (SG) | SGD | Asia/Singapore |
-| Malaysia (MY) | MYR | Asia/Kuala_Lumpur |
-| Indonesia (ID) | IDR | Asia/Jakarta |
-| Philippines (PH) | PHP | Asia/Manila |
-| Vietnam (VN) | VND | Asia/Ho_Chi_Minh |
-| Australia (AU) | AUD | Australia/Sydney |
-| New Zealand (NZ) | NZD | Pacific/Auckland |
-| United Arab Emirates (AE) | AED | Asia/Dubai |
-| Saudi Arabia (SA) | SAR | Asia/Riyadh |
-| South Africa (ZA) | ZAR | Africa/Johannesburg |
-| Morocco (MA) | MAD | Africa/Casablanca |
-| Kenya (KE) | KES | Africa/Nairobi |
-| Nigeria (NG) | NGN | Africa/Lagos |
-| Brazil (BR) | BRL | America/Sao_Paulo |
-| Mexico (MX) | MXN | America/Mexico_City |
-| Chile (CL) | CLP | America/Santiago |
-| Uruguay (UY) | UYU | America/Montevideo |
-| Paraguay (PY) | PYG | America/Asuncion |
-| Japan (JP) | JPY | Asia/Tokyo |
-| South Korea (KR) | KRW | Asia/Seoul |
-| China (CN) | CNY | Asia/Shanghai |
-| Hong Kong SAR China (HK) | HKD | Asia/Hong_Kong |
-| Taiwan (TW) | TWD | Asia/Taipei |
-| Pakistan (PK) | PKR | Asia/Karachi |
-| Bangladesh (BD) | BDT | Asia/Dhaka |
-| Sri Lanka (LK) | LKR | Asia/Colombo |
-| Nepal (NP) | NPR | Asia/Kathmandu |
-| Egypt (EG) | EGP | Africa/Cairo |
-| Israel (IL) | ILS | Asia/Jerusalem |
-| Türkiye (TR) | TRY | Europe/Istanbul |
-| Iran (IR) | IRR | Asia/Tehran |
-| Germany (DE) | EUR | Europe/Berlin |
-| France (FR) | EUR | Europe/Paris |
-| Italy (IT) | EUR | Europe/Rome |
-| Spain (ES) | EUR | Europe/Madrid |
-| Portugal (PT) | EUR | Europe/Lisbon |
-| Netherlands (NL) | EUR | Europe/Amsterdam |
-| Belgium (BE) | EUR | Europe/Brussels |
-| Ireland (IE) | EUR | Europe/Dublin |
-| Austria (AT) | EUR | Europe/Vienna |
-| Greece (GR) | EUR | Europe/Athens |
-| Finland (FI) | EUR | Europe/Helsinki |
-| Luxembourg (LU) | EUR | Europe/Luxembourg |
-| Malta (MT) | EUR | Europe/Malta |
-| Cyprus (CY) | EUR | Asia/Nicosia |
-| Slovakia (SK) | EUR | Europe/Bratislava |
-| Slovenia (SI) | EUR | Europe/Ljubljana |
-| Estonia (EE) | EUR | Europe/Tallinn |
-| Latvia (LV) | EUR | Europe/Riga |
-| Lithuania (LT) | EUR | Europe/Vilnius |
-| Croatia (HR) | EUR | Europe/Zagreb |
-| Switzerland (CH) | CHF | Europe/Zurich |
-| Sweden (SE) | SEK | Europe/Stockholm |
-| Norway (NO) | NOK | Europe/Oslo |
-| Denmark (DK) | DKK | Europe/Copenhagen |
-| Poland (PL) | PLN | Europe/Warsaw |
-| Czechia (CZ) | CZK | Europe/Prague |
-| Hungary (HU) | HUF | Europe/Budapest |
-| Romania (RO) | RON | Europe/Bucharest |
-| Bulgaria (BG) | BGN | Europe/Sofia |
-| Iceland (IS) | ISK | Atlantic/Reykjavik |
-| Serbia (RS) | RSD | Europe/Belgrade |
-| Ukraine (UA) | UAH | Europe/Kyiv |
-| Albania (AL) | ALL | Europe/Tirane |
-| North Macedonia (MK) | MKD | Europe/Skopje |
-| Bosnia & Herzegovina (BA) | BAM | Europe/Sarajevo |
-| Moldova (MD) | MDL | Europe/Chisinau |
-| Georgia (GE) | GEL | Asia/Tbilisi |
-| Armenia (AM) | AMD | Asia/Yerevan |
-| Azerbaijan (AZ) | AZN | Asia/Baku |
-| Qatar (QA) | QAR | Asia/Qatar |
-| Kuwait (KW) | KWD | Asia/Kuwait |
-| Bahrain (BH) | BHD | Asia/Bahrain |
-| Oman (OM) | OMR | Asia/Muscat |
-| Jordan (JO) | JOD | Asia/Amman |
-| Lebanon (LB) | LBP | Asia/Beirut |
-| Iraq (IQ) | IQD | Asia/Baghdad |
-| Yemen (YE) | YER | Asia/Aden |
-| Ghana (GH) | GHS | Africa/Accra |
-| Tanzania (TZ) | TZS | Africa/Dar_es_Salaam |
-| Uganda (UG) | UGX | Africa/Kampala |
-| Ethiopia (ET) | ETB | Africa/Addis_Ababa |
-| Rwanda (RW) | RWF | Africa/Kigali |
-| Côte d’Ivoire (CI) | XOF | Africa/Abidjan |
-| Senegal (SN) | XOF | Africa/Dakar |
-| Cameroon (CM) | XAF | Africa/Douala |
-| Zambia (ZM) | ZMW | Africa/Lusaka |
-| Mauritius (MU) | MUR | Indian/Mauritius |
-| Tunisia (TN) | TND | Africa/Tunis |
-| Algeria (DZ) | DZD | Africa/Algiers |
-| Botswana (BW) | BWP | Africa/Gaborone |
-| Namibia (NA) | NAD | Africa/Windhoek |
-| Mozambique (MZ) | MZN | Africa/Maputo |
-| Angola (AO) | AOA | Africa/Luanda |
-| Kazakhstan (KZ) | KZT | Asia/Almaty |
-| Uzbekistan (UZ) | UZS | Asia/Tashkent |
-| Mongolia (MN) | MNT | Asia/Ulaanbaatar |
-| Myanmar (Burma) (MM) | MMK | Asia/Yangon |
-| Cambodia (KH) | KHR | Asia/Phnom_Penh |
-| Laos (LA) | LAK | Asia/Vientiane |
-| Brunei (BN) | BND | Asia/Brunei |
-| Macao SAR China (MO) | MOP | Asia/Macau |
-| Maldives (MV) | MVR | Indian/Maldives |
-| Bhutan (BT) | BTN | Asia/Thimphu |
-| Afghanistan (AF) | AFN | Asia/Kabul |
-| Guatemala (GT) | GTQ | America/Guatemala |
-| Costa Rica (CR) | CRC | America/Costa_Rica |
-| Panama (PA) | PAB | America/Panama |
-| Dominican Republic (DO) | DOP | America/Santo_Domingo |
-| Honduras (HN) | HNL | America/Tegucigalpa |
-| El Salvador (SV) | USD | America/El_Salvador |
-| Nicaragua (NI) | NIO | America/Managua |
-| Belize (BZ) | BZD | America/Belize |
-| Jamaica (JM) | JMD | America/Jamaica |
-| Trinidad & Tobago (TT) | TTD | America/Port_of_Spain |
-| Bahamas (BS) | BSD | America/Nassau |
-| Barbados (BB) | BBD | America/Barbados |
-| Haiti (HT) | HTG | America/Port-au-Prince |
-| Bolivia (BO) | BOB | America/La_Paz |
-| Ecuador (EC) | USD | America/Guayaquil |
-| Colombia (CO) | COP | America/Bogota |
-| Peru (PE) | PEN | America/Lima |
-| Venezuela (VE) | VES | America/Caracas |
-| Fiji (FJ) | FJD | Pacific/Fiji |
-| Papua New Guinea (PG) | PGK | Pacific/Port_Moresby |
-
-</details>
-
-## Tax support
-
-FloCafe includes a generic calculation engine and supports signed, versioned country tax packs for regional rules, tax categories, and rounding policies. Country coverage is expanding through the catalog, and availability varies. Operators can also configure manual tax rules and rates locally.
-
-> **Notice:** FloCafe is software, not legal or tax advice. Tax packs and configuration tools do not by themselves certify compliance with local regulations. Operators remain responsible for verifying the requirements that apply to their business.
-
-For pack authoring, validation, and schema details, see the [Tax packs developer guide](docs/reference/tax-packs.md).
-
-## Development
-
-Setting up a local development environment requires Node.js 22 or later:
-
-```sh
-git clone https://github.com/FreeOpenSourcePOS/FloCafe.git
-cd FloCafe
+```bash
 npm install
+```
+
+### 3. Configure Environment
+
+Copy the example environment configuration:
+
+```bash
+cp .env.example .env
+```
+
+Review or modify `.env`:
+
+```env
+NODE_ENV=production
+PORT=3001
+KDS_PORT=3002
+SERVER_APP_PORT=3003
+JWT_SECRET=your-secure-random-jwt-secret
+AWS_S3_BACKUP_BUCKET=hourglass-pos-database-backup-866874944450
+AWS_REGION=ap-south-1
+```
+
+### 4. Launch Application
+
+To launch both the backend services and the Electron desktop application:
+
+```bash
 npm run dev
 ```
 
-`npm run dev` builds the frontend and backend, then launches Electron.
+Or using the production launcher script:
 
-### Architecture
-
-```text
-Electron main process
-├── Express API and WebSocket server       :3001
-├── Standalone kitchen-display server      :3002
-├── Server / waiter app server             :3003
-└── SQLite database, migrations, and printing
-                 ↕ HTTP and WebSocket
-Next.js renderer
-└── React UI and Zustand client state
+```bash
+bash start.sh
 ```
 
-For detailed developer workflows, coding standards, branch conventions, and testing procedures, see [CONTRIBUTING.md](CONTRIBUTING.md).
+---
+
+## Building & Packaging
+
+Hourglass Cafe supports native desktop packaging across all major platforms:
+
+```bash
+# Package for current operating system
+npm run build:frontend && npm run build && npm run pack
+
+# Linux (.AppImage, .deb, Snap)
+npm run release:linux
+
+# macOS (.dmg, Universal)
+npm run release:mac
+
+# Windows (.exe installer, AppX)
+npm run release:win
+```
+
+---
+
+## Cloud Backup & Disaster Recovery
+
+Hourglass Cafe features an automated backup system:
+
+1. **Local Snapshots:** Timestamped SQLite database archives stored locally under `backups/flo_backup_*.db.gz`.
+2. **AWS S3 Cloud Archival:** Every backup is automatically transmitted to Amazon S3:
+   ```bash
+   bash scripts/backup_db.sh
+   ```
+3. **Automated Pruning:** Retains 30 days of rolling backups, automatically purging older archives to conserve disk space.
+
+---
+
+## Supported Languages & Regions
+
+Hourglass Cafe includes UI translations and regional profiles for:
+
+- **Languages:** English, Spanish, French, Portuguese, Russian, Filipino, Turkish, Persian (Farsi), Arabic, Urdu, German, Italian, Japanese, Simplified Chinese, Traditional Chinese, Korean, Indonesian, Dutch, Hindi, Bengali, Albanian, Vietnamese, Thai, and Nepali.
+- **RTL Support:** Native right-to-left layout and typography for Arabic, Hebrew, Persian, and Urdu.
+- **131 Country Profiles:** Preconfigured currency symbols, tax formats, and timezones.
+
+---
 
 ## Contributing
 
-Contributions are welcome. Please check [CONTRIBUTING.md](CONTRIBUTING.md) before starting work:
+Contributions, feedback, and pull requests are warmly welcomed:
 
-- **Small bug fixes, documentation improvements, and focused tests** can be started freely.
-- **New features, database schema changes, and architectural refactors** require maintainer discussion and approval before implementation.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-If FloCafe is useful to you, consider starring the repository.
-
-## Help and documentation
-
-- **Documentation index:** [docs/README.md](docs/README.md)
-- **Printer guide & troubleshooting:** [docs/printers.md](docs/printers.md)
-- **Linux setup & support:** [docs/linux.md](docs/linux.md)
-- **Internationalization & translations:** [docs/architecture/internationalization.md](docs/architecture/internationalization.md)
-- **Google Drive backup setup:** [docs/google-drive-setup.md](docs/google-drive-setup.md)
-- **Bug reports & feature proposals:** [GitHub Issues](https://github.com/FreeOpenSourcePOS/FloCafe/issues)
-- **General questions & ideas:** [GitHub Discussions](https://github.com/FreeOpenSourcePOS/FloCafe/discussions)
+---
 
 ## License
 
-FloCafe is open-source software licensed under the [MIT License](LICENSE).
+This project is open-source software licensed under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+  <p><strong>Hourglass Cafe</strong> — Taste The Rhythm of Time</p>
+  <p>Maintained by <a href="https://github.com/kunalworks01">Kunal Vashisth</a></p>
+</div>

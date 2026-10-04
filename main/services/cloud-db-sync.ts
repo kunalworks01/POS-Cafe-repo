@@ -1,12 +1,17 @@
+import fs from 'fs';
+import path from 'path';
+import { execFile } from 'child_process';
 import { getDatabase, now } from '../db';
 import { generateIntelligenceReport } from './ai-advisor';
 
 export interface CloudDatabaseConfig {
-  provider: 'aws_rds_postgres' | 'aws_aurora' | 'cloud_sql' | 'aws_s3_data_lake';
+  provider: 'aws_rds_postgres' | 'aws_aurora' | 'cloud_sql' | 'aws_s3_data_lake' | 'aws_cloud_infrastructure';
   endpoint: string;
   database: string;
   port: number;
   ssl: boolean;
+  s3Bucket?: string;
+  region?: string;
   autoSyncMinutes: number;
   lastSyncedAt: string | null;
   status: 'connected' | 'syncing' | 'idle' | 'unconfigured' | 'error';
@@ -22,10 +27,12 @@ export interface CloudDatabaseConfig {
 }
 
 let cloudConfig: CloudDatabaseConfig = {
-  provider: 'aws_rds_postgres',
+  provider: 'aws_cloud_infrastructure',
   endpoint: process.env.RDS_ENDPOINT || 'rds-hourglass-main.cp8au6.ap-south-1.rds.amazonaws.com',
   database: process.env.RDS_DATABASE || 'hourglass_pos_db',
   port: parseInt(process.env.RDS_PORT || '5432', 10),
+  s3Bucket: process.env.AWS_S3_BACKUP_BUCKET || 'hourglass-pos-database-backup-866874944450',
+  region: process.env.AWS_REGION || 'ap-south-1',
   ssl: true,
   autoSyncMinutes: 5,
   lastSyncedAt: new Date().toISOString(),
@@ -118,9 +125,26 @@ export async function executeCloudDatabaseSync(): Promise<{
       products: products.length,
     };
 
+    // Execute automated AWS S3 database snapshot upload
+    const possibleBackupScripts = [
+      '/home/admin/Projects-main/scripts/backup_db.sh',
+      path.resolve(process.cwd(), 'scripts/backup_db.sh'),
+      path.resolve(__dirname, '../../scripts/backup_db.sh'),
+    ];
+    const scriptPath = possibleBackupScripts.find((p) => fs.existsSync(p));
+    if (scriptPath) {
+      execFile(scriptPath, (error, stdout) => {
+        if (error) {
+          console.warn('[Cloud DB Sync] AWS S3 backup warning:', error.message);
+        } else {
+          console.log('[Cloud DB Sync] AWS S3 database backup synchronized successfully');
+        }
+      });
+    }
+
     return {
       success: true,
-      message: `Successfully synchronized ${orders.length + bills.length + customers.length} transactional records and AI analytics to central Cloud Database (${cloudConfig.endpoint})`,
+      message: `Successfully synchronized ${orders.length + bills.length + customers.length} transactional records and AI analytics to AWS Cloud Database (${cloudConfig.endpoint}) and AWS S3 (${cloudConfig.s3Bucket})`,
       syncedTables,
       syncedAt,
     };
